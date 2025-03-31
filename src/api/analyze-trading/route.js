@@ -1,7 +1,13 @@
-async function handler({ image }) {
-  if (!image) {
+// app/api/analyze-trading-image/route.js
+'use server';
+
+// Necessary imports
+
+export async function POST(req) {
+    const { image } = await req.json();
+    if (!image) {
     console.error("Analysis error: No image provided");
-    return { success: false, error: "No image provided" };
+    return Response.json({ success: false, error: "No image provided" });
   }
 
   try {
@@ -12,10 +18,10 @@ async function handler({ image }) {
 
     if (!base64Image) {
       console.error("Analysis error: Invalid base64 format");
-      return {
+      return Response.json({
         success: false,
         error: "Invalid image format. Must be base64 encoded",
-      };
+      });
     }
 
     const visionMessages = [
@@ -87,12 +93,12 @@ async function handler({ image }) {
 
     const prediction = geminiData.choices[0].message.content;
 
-    return {
+    return Response.json({
       success: true,
       analysis,
       prediction,
       imageUrl: `data:image/jpeg;base64,${base64Image}`,
-    };
+    });
   } catch (error) {
     console.error("Analysis error:", {
       message: error.message,
@@ -100,9 +106,12 @@ async function handler({ image }) {
       timestamp: new Date().toISOString(),
     });
 
-    return {
+    return Response.json({
       success: false,
       error: error.message || "Failed to analyze image. Please try again.",
-    };
+    });
   }
 }
+
+export { handler as GET };
+export { handler as PUT };
