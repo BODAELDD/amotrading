@@ -1,40 +1,21 @@
 // app/api/upload/route.js
 import { NextResponse } from 'next/server';
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const body = await req.json(); // Assuming you are sending JSON with base64
-    const base64Image = body.base64;
+    const data = await request.json(); // Parse the JSON body
+    const base64Image = data.base64; // Access the base64 image data
 
     if (!base64Image) {
-      console.error("Upload error: No base64 data provided");
-      return NextResponse.json({ error: "No image data provided" }, { status: 400 });
+      console.error("No base64 image data received");
+      return NextResponse.json({ success: false, error: "No image data received" }, { status: 400 });
     }
 
-    // Here you'd typically:
-    // 1. Generate a unique filename (e.g., using UUID)
-    // 2. Decode the base64 string into binary data
-    // 3. Upload the binary data to a storage service (S3, Cloudinary, etc.)
+    // TODO: Process the base64 image data here (e.g., save to disk, upload to cloud storage)
 
-    const buffer = Buffer.from(base64Image, 'base64'); // Decode
-
-    // --- EXAMPLE: Saving to local filesystem (NOT RECOMMENDED FOR PRODUCTION) ---
-    const filename = `image-${Date.now()}.jpeg`;
-    const filepath = `./public/uploads/${filename}`; // Use a safe directory
-    // Check that the `./public/uploads` directory exists.
-    await fs.promises.mkdir('./public/uploads', { recursive: true })
-    await fs.promises.writeFile(filepath, buffer); // Save to file
-
-    const imageUrl = `/uploads/${filename}`;  // Public URL
-    console.log('File uploaded successfully to:', imageUrl);
-
-    return NextResponse.json({ url: imageUrl }); // Send URL back to client
-
+    return NextResponse.json({ success: true, url: 'fake_image_url', mimeType: 'image/jpeg' }, { status: 200 }); // replace with actual image URL
   } catch (error) {
-    console.error("Upload error:", error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    console.error("Error processing upload request", error);
+    return NextResponse.json({ success: false, error: "Failed to upload image" }, { status: 500 });
   }
 }
-
-//Need `fs` to use the code above
-import * as fs from 'fs'
