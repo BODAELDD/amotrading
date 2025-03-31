@@ -1,3 +1,5 @@
+'use client'; // This line is CRUCIAL and MUST be present
+
 import React from 'react';
 
 function useHandleStreamResponse({
