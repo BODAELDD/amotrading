@@ -98,40 +98,53 @@ function MainComponent() {
       setIsAnalyzing(true);
       setError(null);
 
+      // 1. Gets base64 data (Correct)
       const base64 = await getBase64(file);
+
+      // 2. Makes a POST request to the correct endpoint (Correct)
       const response = await fetch("/api/analyze-trading-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", // Correct method
+        headers: { "Content-Type": "application/json" }, // Correct header
+        // 3. Sends JSON body with "image" key (Correct - matches backend)
         body: JSON.stringify({
           image: base64,
         }),
       });
 
+      // 4. Parses the JSON response (Correct)
       const data = await response.json();
 
+      // 5. Checks if the response status was OK (Correct)
       if (!response.ok) {
+        // Uses error message from backend response if available
         throw new Error(data.error || `HTTP error! status: ${response.status}`);
       }
 
+      // 6. Checks the 'success' flag from the backend response (Correct)
       if (!data.success) {
         throw new Error(
           data.error || "Analysis failed without a specific error message"
         );
       }
 
+      // 7. Checks for expected data fields (Correct)
       if (!data.analysis || !data.prediction) {
         throw new Error("Invalid response format from analysis service");
       }
 
+      // 8. Updates state on success (Correct)
       setAnalysis(data.analysis);
       setPrediction(data.prediction);
+
     } catch (err) {
+      // 9. Sets user-facing error message on failure (Correct)
       setError(err.message || "Failed to analyze image. Please try again.");
       console.error("Analysis error:", err);
     } finally {
+      // 10. Resets loading state (Correct)
       setIsAnalyzing(false);
     }
-  }, [file, previewUrl, getBase64]);
+  }, [file, previewUrl, getBase64]); // Dependencies look correct
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
