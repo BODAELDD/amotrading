@@ -3,7 +3,6 @@
 import React, { useState, useCallback } from "react"; // Add useCallback and useState import
 import { useUpload } from "../utilities/runtime-helpers";
 
-("use client");
 
 function MainComponent() {
   const [file, setFile] = React.useState(null);
