@@ -1,9 +1,7 @@
-"use client";
-import React, { useState, useCallback } from "react";
+"use client"; // This MUST be the very first line (other than comments).
 
+import React, { useState, useCallback } from "react"; // Add useCallback and useState import
 import { useUpload } from "../utilities/runtime-helpers";
-
-("use client");
 
 function MainComponent() {
   const [file, setFile] = React.useState(null);
