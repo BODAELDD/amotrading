@@ -3,6 +3,8 @@ import React from "react";
 
 import { useUpload } from "../utilities/runtime-helpers";
 
+("use client");
+
 function MainComponent() {
   const [file, setFile] = useState(null);
   const [upload, { loading: uploading }] = useUpload();
