@@ -1,17 +1,20 @@
-"use client"; // This MUST be the very first line (other than comments).
+"use client";
+import React from "react";
 
-import React, { useState, useCallback } from "react"; // Add useCallback and useState import
 import { useUpload } from "../utilities/runtime-helpers";
 
+("use client");
+
 function MainComponent() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = React.useState(null);
   const [upload, { loading: uploading }] = useUpload();
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [analysis, setAnalysis] = useState(null);
-  const [prediction, setPrediction] = useState(null);
-  const [error, setError] = useState(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [previewUrl, setPreviewUrl] = React.useState(null);
+  const [analysis, setAnalysis] = React.useState(null);
+  const [prediction, setPrediction] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [isAnalyzing, setIsAnalyzing] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
+
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -20,6 +23,7 @@ function MainComponent() {
       reader.onerror = (error) => reject(error);
     });
   };
+
   const validateImageFile = (file) => {
     const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(file.type)) {
@@ -32,7 +36,8 @@ function MainComponent() {
     }
     return true;
   };
-  const handleImageUpload = useCallback(
+
+  const handleImageUpload = React.useCallback(
     async (file) => {
       if (validateImageFile(file)) {
         try {
@@ -53,7 +58,8 @@ function MainComponent() {
     },
     [upload]
   );
-  const onDrop = useCallback(
+
+  const onDrop = React.useCallback(
     (e) => {
       e.preventDefault();
       setIsDragging(false);
@@ -64,7 +70,8 @@ function MainComponent() {
     },
     [handleImageUpload]
   );
-  const handleFileSelect = useCallback(
+
+  const handleFileSelect = React.useCallback(
     (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
@@ -73,22 +80,26 @@ function MainComponent() {
     },
     [handleImageUpload]
   );
-  const handleDragOver = useCallback((e) => {
+
+  const handleDragOver = React.useCallback((e) => {
     e.preventDefault();
     setIsDragging(true);
   }, []);
-  const handleDragLeave = useCallback((e) => {
+
+  const handleDragLeave = React.useCallback((e) => {
     e.preventDefault();
     setIsDragging(false);
   }, []);
-  const handleRemoveImage = useCallback(() => {
+
+  const handleRemoveImage = React.useCallback(() => {
     setFile(null);
     setPreviewUrl(null);
     setAnalysis(null);
     setPrediction(null);
     setError(null);
   }, []);
-  const analyzeImage = useCallback(async () => {
+
+  const analyzeImage = React.useCallback(async () => {
     if (!file || !previewUrl) {
       setError("Please upload an image first");
       return;
@@ -152,22 +163,22 @@ function MainComponent() {
               onDragLeave={handleDragLeave}
               onDrop={onDrop}
               className={`
-      relative
-      border-2 border-dashed rounded-2xl
-      transition-all duration-300 ease-in-out
-      ${
-        isDragging
-          ? "border-blue-500 bg-blue-500/10"
-          : !previewUrl
-          ? "border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
-          : "border-gray-700"
-      }
-      min-h-[400px]
-      flex flex-col items-center justify-center
-      p-8
-      cursor-pointer
-      group
-    `}
+                relative
+                border-2 border-dashed rounded-2xl
+                transition-all duration-300 ease-in-out
+                ${
+                  isDragging
+                    ? "border-blue-500 bg-blue-500/10"
+                    : !previewUrl
+                    ? "border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
+                    : "border-gray-700"
+                }
+                min-h-[400px]
+                flex flex-col items-center justify-center
+                p-8
+                cursor-pointer
+                group
+              `}
             >
               {!previewUrl ? (
                 <div className="space-y-6 text-center">
@@ -280,17 +291,17 @@ function MainComponent() {
                   onClick={analyzeImage}
                   disabled={isAnalyzing}
                   className={`
-      w-full max-w-md
-      flex items-center justify-center
-      px-8 py-4 rounded-xl
-      font-medium text-lg
-      transition-all duration-500
-      ${
-        isAnalyzing
-          ? "bg-gray-700 cursor-not-allowed"
-          : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
-      }
-    `}
+                    w-full max-w-md
+                    flex items-center justify-center
+                    px-8 py-4 rounded-xl
+                    font-medium text-lg
+                    transition-all duration-500
+                    ${
+                      isAnalyzing
+                        ? "bg-gray-700 cursor-not-allowed"
+                        : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+                    }
+                  `}
                 >
                   {isAnalyzing ? (
                     <>
