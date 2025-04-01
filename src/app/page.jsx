@@ -14,7 +14,6 @@ function MainComponent() {
   const [error, setError] = React.useState(null);
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
-
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -26,7 +25,6 @@ function MainComponent() {
       reader.onerror = (error) => reject(error);
     });
   };
-
   const validateImageFile = (file) => {
     const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(file.type)) {
@@ -39,7 +37,6 @@ function MainComponent() {
     }
     return true;
   };
-
   const handleImageUpload = React.useCallback(
     async (file) => {
       if (!file) return;
@@ -63,7 +60,6 @@ function MainComponent() {
     },
     [upload]
   );
-
   const onDrop = React.useCallback(
     (e) => {
       e.preventDefault();
@@ -75,7 +71,6 @@ function MainComponent() {
     },
     [handleImageUpload]
   );
-
   const handleFileSelect = React.useCallback(
     (e) => {
       const selectedFile = e.target.files[0];
@@ -85,17 +80,14 @@ function MainComponent() {
     },
     [handleImageUpload]
   );
-
   const handleDragOver = React.useCallback((e) => {
     e.preventDefault();
     setIsDragging(true);
   }, []);
-
   const handleDragLeave = React.useCallback((e) => {
     e.preventDefault();
     setIsDragging(false);
   }, []);
-
   const handleRemoveImage = React.useCallback(() => {
     setFile(null);
     setPreviewUrl(null);
@@ -103,7 +95,6 @@ function MainComponent() {
     setPrediction(null);
     setError(null);
   }, []);
-
   const analyzeImage = React.useCallback(async () => {
     if (!file || !previewUrl) {
       setError("Please upload an image first");
