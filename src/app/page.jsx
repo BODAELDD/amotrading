@@ -1,7 +1,9 @@
-"use client"; // This MUST be the very first line (other than comments).
+"use client";
+import React from "react";
 
-import React, { useState, useCallback } from "react"; // Add useCallback and useState import
 import { useUpload } from "../utilities/runtime-helpers";
+
+("use client");
 
 function MainComponent() {
   const [file, setFile] = React.useState(null);
@@ -17,7 +19,10 @@ function MainComponent() {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => {
+        const base64 = reader.result.split(",")[1];
+        resolve(base64);
+      };
       reader.onerror = (error) => reject(error);
     });
   };
@@ -37,6 +42,8 @@ function MainComponent() {
 
   const handleImageUpload = React.useCallback(
     async (file) => {
+      if (!file) return;
+
       if (validateImageFile(file)) {
         try {
           const base64 = await getBase64(file);
